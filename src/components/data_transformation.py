@@ -34,20 +34,20 @@ class DataTransformation:
 			num_pipeline = Pipeline(
 				steps = [
 					("imputer", SimpleImputer(strategy = "median")),
-					("scaler", StandardScaler())]
+					("scaler", StandardScaler(with_mean=False))]
 
 			)
 			cat_pipeline = Pipeline(
 				steps = [
 					("imputer", SimpleImputer(strategy = "most_frequent")),
 					("one_hot_encoder", OneHotEncoder()),
-					("scaler", StandardScaler())
+					("scaler", StandardScaler(with_mean = False))
 					]
 
 			)
 
-			logging_info(f"{categorical_columns} encoding completed")
-			logging_info(f"{numerical_columns} encoding completed")
+			logging.info(f"{categorical_columns} encoding completed")
+			logging.info(f"{numerical_columns} encoding completed")
 
 			preprocessor = ColumnTransformer(
 				[
@@ -58,7 +58,7 @@ class DataTransformation:
 
 			return preprocessor
 
-		except Excpetion as e:
+		except Exception  as e:
 			raise CustomException(e, sys)
 	
 	def initiate_data_transformation(self, train_path, test_path):
@@ -70,7 +70,7 @@ class DataTransformation:
 
 			logging.info("Obtaining preprocessing object")
 
-			preprocessing_obj = get_data_transformer_obj()
+			preprocessing_obj = self.get_data_transformer_obj()
 
 			target_column_name = 'math score'
 			numerical_columns = ['reading score','writing score']
@@ -99,7 +99,7 @@ class DataTransformation:
 
 			return (train_arr, test_arr, self.data_transformation_config.preprocessor_ob_file_path)
 
-		except Excpetion as e:
+		except Exception as e:
 			raise CustomException(e,sys)
 
 
